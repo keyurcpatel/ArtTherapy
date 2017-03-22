@@ -1,17 +1,12 @@
 package edu.csulb.android.arttherapy;
 
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.provider.Settings;
-import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -22,11 +17,9 @@ import static android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener   {
 
-    private SensorManager sensorManager;
-    private boolean color = false;
-    private long lastUpdate;
     TextView textX, textY, textZ;
-    int i=0;
+    private SensorManager sensorManager;
+    private long lastUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,23 +38,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
         lastUpdate = System.currentTimeMillis();
-        System.out.println(i+"empty");
 
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
         Log.v("MainActivity","displayAccelerometer"+"X"+event.values[0]+"Y"+event.values[1]+"Z"+event.values[2]);
-        textX.setText(event.values[0]+"");
-        textY.setText(event.values[1]+"");
-        textZ.setText(event.values[2]+"");
-//        Log.v("MainActivity","displayAccelerometer"+"X"+event.values[0]+"Y"+event.values[1]+"Z"+event.values[2]);
-//        displayAccelerometer(event);
+        textX.setText(String.valueOf(event.values[0]));
+        textY.setText(String.valueOf(event.values[1]));
+        textZ.setText(String.valueOf(event.values[2]));
         if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            Log.e("MainActivity", "onSensorChanged: "+i);
-            System.out.println(++i);
-            //Toast.makeText(this, i+"", Toast.LENGTH_LONG).show();
-            //displayAccelerometer(event);
             checkShake(event);
         }
     }
@@ -90,9 +76,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 return;
             }
             lastUpdate = actualTime;
-            Log.e("MainActivity","Don't shake me called"+i );
             Toast.makeText(this, "Don't shake me!", Toast.LENGTH_SHORT).show();
-            //clearDrawing();
+
         }
     }
 
